@@ -25,6 +25,8 @@ from .preguntas import JuegoPreguntas
 from .logicoli import LogicaColision
 from . import textos as textos
 from .posiciones import game_positions
+from . import game_state_manager
+from .game_state_manager import GameStateManager, GameStatus
 from . import diccionario
 
 character = create_character  # Usamos la instancia importada
@@ -33,6 +35,7 @@ snowman = Snowman()
 action_number = 0
 posi = game_positions
 selected_character = 0
+game_state_manager = GameStateManager()
 
 # Configuración del logging
 logging.basicConfig(
@@ -249,15 +252,19 @@ class GameLevel:
             logger.info("¡Juego completado!")    
 
     def generate_enemies_and_treasures(self):
+        """Genera enemigos y tesoros en posiciones aleatorias."""
+
+        self.level_number = game_state_manager.current_level    
+
         if self.level_number == 1:
             draw.draw_malos_uno()
-            draw.draw_collectible_uno()
+            
         elif self.level_number == 2:
             draw.draw_malos_dos()
-            draw.draw_collectible_dos()
+            
         elif self.level_number == 3:
             draw.draw_malos_tres()
-            draw.draw_collectible_tres()
+            
      
     
 
@@ -299,6 +306,10 @@ class GameLevel:
         glPopMatrix()
 
         self.generate_enemies_and_treasures()
+
+        enemy.is_visible = True
+        character.is_active = True
+        snowman.visible = True  
       
         # Dibujar el HUD
         #self.draw_hud()

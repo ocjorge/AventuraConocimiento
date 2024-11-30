@@ -72,7 +72,7 @@ obj4_height = 1
 PosX_objeto3 = 5
 PosY_objeto3 = -14
 PosZ_objeto3 = 14
-obj3_height = 1
+obj3_height = 5
 
 PosX_objeto2 = 0
 PosY_objeto2 = 0
@@ -94,13 +94,13 @@ objeto_height = 1
 objeto_width = 1
 objeto_depth = 1
 
-
 def draw5():        
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
     glTranslatef(PosX_objeto4, PosY_objeto4, PosZ_objeto4)
     lc.interpolado(0.4, 0.4, 0.4)
-    obj.draw_pyramid(3, 6, 0, 4)
+    glColor3b(255, 165, 0)
+    obj.draw_pyramid(3, 6, 0, 2)
     glPopMatrix()
     glDisable(GL_LIGHTING)
     glDisable(GL_LIGHT0)
@@ -108,9 +108,10 @@ def draw5():
 def draw4():        
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
-    glTranslatef(PosX_objeto3, PosY_objeto3, PosZ_objeto3)
+    glTranslatef(2, 10, PosZ_objeto3)
     lc.gouraud(0.6, 0.6, 0.6)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    glColor3b(45,87,44)
+    obj.draw_cube_dos()
     glPopMatrix()
     glDisable(GL_LIGHTING)
     glDisable(GL_LIGHT0)
@@ -127,9 +128,18 @@ def draw3():
     glDisable(GL_LIGHT0)
 
 def draw2(movX, movY):
-    global PosX_objeto2, PosY_objeto2
-    PosX_objeto2 += movX
-    PosY_objeto2 += movY
+    global PosX_objeto1, PosY_objeto1
+    
+    ancho_pantalla = 800  # Cambia por el ancho real de tu espacio
+    alto_pantalla = 600   # Cambia por el alto real de tu espacio
+
+    PosX_objeto1 += movX
+    PosY_objeto1 += movY
+
+    PosX_objeto1 = max(0, min(PosX_objeto1, ancho_pantalla))
+    PosY_objeto1 = max(0, min(PosY_objeto1, alto_pantalla))
+
+    
     
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
@@ -294,6 +304,13 @@ def reproducir_texto(nombre):
     engine.say(texto)
     engine.runAndWait()    
     
+def show_restart_menu():
+    root = tk.Tk()
+    root.withdraw()  # Ocultar la ventana principal
+    response = messagebox.askyesno("Reiniciar", "Game Over! ¿Te gustaría reiniciar el juego?")
+    root.destroy()  # Cerrar la ventana principal
+    return response  # Devuelve True si el usuario elige "Sí", False si elige "No"
+
 def main():
     global continua_juego, current_escenario, elapsed_time, action, rotation_angle_start, rotation_speed_start , move_count, rotation_complete, current_level  # Declaración global
 
@@ -431,7 +448,7 @@ def main():
 
         glPushMatrix()
         glRotatef(rotation_angle_character, 0, 1, 0)
-        dra.draw_character(character, game_positions.PosX_objeto1, game_positions.PosY_objeto1, game_positions.PosZ_objeto1)
+        dra.draw_character(character, 10, 6, 4)
         dra.draw_character(snowman, 6, 6, 4)
         dra.draw_character(enemy, 0, 6, 4)
         character.jump()
@@ -487,12 +504,15 @@ def main():
                 game_state = GameState.PLAYING_LEVEL
                 game_level.initialize_level(action)
                 current_escenario = 1  # Cambiar al escenario del primer nivel
+                snowman.remove()
+                character.remove()
+                enemy.remove()
                 son.play_music("Sounds/game-music-loop-1-143979.mp3")
                 
             
         elif game_state == GameState.PLAYING_LEVEL:
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
+            
             
 
             # Dibujar escenario
@@ -563,6 +583,7 @@ def main():
                   # Handle the game status
                 if status == GameStatus.GAME_OVER:
                     show_message_window(message)
+                    action = 0
                     running = False
                 elif status == GameStatus.LEVEL_COMPLETE:
                     game_manager.advance_level()
@@ -572,6 +593,7 @@ def main():
                     show_message_window(message)
                 elif status == GameStatus.GAME_WIN:
                     show_message_window(message)
+                    action = 0
                     running = False
                 
                 # Show progress after each answer (optional)
@@ -634,7 +656,7 @@ def main():
         if keys[pygame.K_v]:  # Encender sonido general
             son.play_music("Sounds/s00.mp3")
         if keys[pygame.K_b]:  # Apagar sonido general
-            son,stop_music()
+            son.stop_music()
 
         # Mostrar instrucciones al presionar F1
 
@@ -659,4 +681,9 @@ if __name__ == "__main__":
 
     while True:
         if pantalla_uno.ejecutar():
-            main()
+            while True:
+                main()
+
+                user_choice = show_restart_menu()
+                if not user_choice:
+                    break  # Salir del juego si el usuario elige salir

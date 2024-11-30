@@ -59,7 +59,7 @@ class PantallaTitulo:
         self.texto_titulo = "Aventura del Conocimiento"
         self.texto_mensaje = ""
         
-        son.play_music("Sounds\principal0.mp3")
+        son.play_music("Sounds/principal0.mp3")
 
         # Botones del menú
         self.BTN_PLAY = Button(None, (self.ANCHO / 2, 300), "PLAY", self.fuente_titulo, (255, 255, 255), (0, 255, 0))

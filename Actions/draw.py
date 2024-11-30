@@ -3,6 +3,8 @@ import pygame
 import numpy as np
 import math
 import os
+import random
+import OpenGL.GL as gl
 from OpenGL.GLU import *
 from OpenGL.GL import *
 from OpenGL.GLUT import *
@@ -147,155 +149,88 @@ def draw_tesoro(position):
 
 # Dibuja los malos
 def draw_malos_uno():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
- 
-    lc.gouraud(128.0, 0.0, 128.0)    
-    glTranslatef(posi.PosX_objeto2, posi.PosY_objeto2, posi.PosZ_objeto2)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-    glTranslatef(posi.PosX_objeto4, posi.PosY_objeto4, posi.PosZ_objeto4)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-    glTranslatef(posi.PosX_objeto6, posi.PosY_objeto6, posi.PosZ_objeto6)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-    glTranslatef(posi.PosX_objeto8, posi.PosY_objeto8, posi.PosZ_objeto8)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glPopMatrix()
+    gl.glEnable(gl.GL_DEPTH_TEST)
+    gl.glPushMatrix()
+    
+    # Generar posiciones aleatorias en un rango de -20 a 20
+    posiciones = [
+        (random.uniform(-20, 20), 
+         random.uniform(-20, 20), 
+         random.uniform(-20, 20)) 
+        for _ in range(4)
+    ]
+    
+    # Colores RGB aleatorios
+    colores = [
+        (random.random(), random.random(), random.random()) 
+        for _ in range(4)
+    ]
+    
+    # Dibujar cilindros en posiciones aleatorias
+    for (x, y, z), color in zip(posiciones, colores):
+        gl.glPushMatrix()
+        gl.glTranslatef(x, y, z)
+        gl.glColor3f(*color)  # Establece el color aleatorio antes de dibujar
+        obj.draw_cylinder(0, 0, 0, 2, 5)
+        gl.glPopMatrix()
+    
+    gl.glPopMatrix()
     
 def draw_malos_dos():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
+    gl.glEnable(gl.GL_DEPTH_TEST)
+    gl.glPushMatrix()
     
-    lc.gouraud(128.0, 0.0, 128.0)
+    # Generar 8 posiciones aleatorias en un rango de -20 a 20
+    posiciones = [
+        (random.uniform(-20, 20), 
+         random.uniform(-20, 20), 
+         random.uniform(-20, 20)) 
+        for _ in range(8)
+    ]
     
-    glTranslatef(posi.PosX_objeto3, posi.PosY_objeto3, posi.PosZ_objeto3)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    # Colores RGB aleatorios para 8 cilindros
+    colores = [
+        (random.random(), random.random(), random.random()) 
+        for _ in range(8)
+    ]
     
-    glTranslatef(posi.PosX_objeto5, posi.PosY_objeto5, posi.PosZ_objeto5)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    # Dibujar cilindros en posiciones aleatorias
+    for (x, y, z), color in zip(posiciones, colores):
+        gl.glPushMatrix()
+        gl.glTranslatef(x, y, z)
+        gl.glColor3f(*color)
+        obj.draw_pyramid(3, 6, 0, 4)
+        gl.glPopMatrix()
     
-    glTranslatef(posi.PosX_objeto7, posi.PosY_objeto7, posi.PosZ_objeto7)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glTranslatef(posi.PosX_objeto9, posi.PosY_objeto9, posi.PosZ_objeto9)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glTranslatef(posi.PosX_objeto11, posi.PosY_objeto11, posi.PosZ_objeto11)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-
-    glPopMatrix()
-    glDisable(GL_LIGHTING)
-    glDisable(GL_LIGHT0)
+    gl.glPopMatrix()
 
 def draw_malos_tres():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
+    gl.glEnable(gl.GL_DEPTH_TEST)
+    gl.glPushMatrix()
     
-    lc.gouraud(128.0, 0.0, 128.0)
-
-    glTranslatef(posi.PosX_objeto3, posi.PosY_objeto3, posi.PosZ_objeto3)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    # Generar 12 posiciones aleatorias en un rango de -20 a 20
+    posiciones = [
+        (random.uniform(-20, 20), 
+         random.uniform(-20, 20), 
+         random.uniform(-20, 20)) 
+        for _ in range(12)
+    ]
     
-    glTranslatef(posi.PosX_objeto5, posi.PosY_objeto5, posi.PosZ_objeto5)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    # Colores RGB aleatorios para 12 cilindros
+    colores = [
+        (random.random(), random.random(), random.random()) 
+        for _ in range(12)
+    ]
     
-    glTranslatef(posi.PosX_objeto7, posi.PosY_objeto7, posi.PosZ_objeto7)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glTranslatef(posi.PosX_objeto9, posi.PosY_objeto9, posi.PosZ_objeto9)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glTranslatef(posi.PosX_objeto13, posi.PosY_objeto13, posi.PosZ_objeto13)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
-
-    glTranslatef(posi.PosX_objeto15, posi.PosY_objeto15, posi.PosZ_objeto15)
-    obj.draw_cylinder(0, 0, 0, 2, 5)
+    # Dibujar cilindros en posiciones aleatorias
+    for (x, y, z), color in zip(posiciones, colores):
+        gl.glPushMatrix()
+        gl.glTranslatef(x, y, z)
+        gl.glColor3f(*color)
+        obj.draw_sphere(2, 5, 5)
+        gl.glPopMatrix()
     
-    glPopMatrix()
-    glDisable(GL_LIGHTING)
-    glDisable(GL_LIGHT0)
-
-# Dibuja los coleccionables
-
-
-def draw_collectible_uno():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
-    lc.interpolado(255.0, 165.0, 0.0)
-    
-    glTranslatef(posi.PosX_objeto16, posi.PosY_objeto16, posi.PosZ_objeto16)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto18, posi.PosY_objeto18, posi.PosZ_objeto18)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto20, posi.PosY_objeto20, posi.PosZ_objeto20)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto22, posi.PosY_objeto22, posi.PosZ_objeto22)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glTranslatef(posi.PosX_objeto24, posi.PosY_objeto24, posi.PosZ_objeto24)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glPopMatrix()
-    
-
-
-def draw_collectible_dos():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
-  
-    
-    lc.interpolado(255.0, 165.0, 0.0)
-    
-    glTranslatef(posi.PosX_objeto17, posi.PosY_objeto17, posi.PosZ_objeto17)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto19, posi.PosY_objeto19, posi.PosZ_objeto19)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto21, posi.PosY_objeto21, posi.PosZ_objeto21)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto23, posi.PosY_objeto23, posi.PosZ_objeto23)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glTranslatef(posi.PosX_objeto25, posi.PosY_objeto25, posi.PosZ_objeto25)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glPopMatrix()
-    glDisable(GL_LIGHTING)
-    glDisable(GL_LIGHT0)
-
-
-def draw_collectible_tres():
-    glEnable(GL_DEPTH_TEST)
-    glPushMatrix()
-    
-    
-    lc.interpolado(255.0, 165.0, 0.0)
-    
-    glTranslatef(posi.PosX_objeto16, posi.PosY_objeto16, posi.PosZ_objeto16)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto18, posi.PosY_objeto18, posi.PosZ_objeto18)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto20, posi.PosY_objeto20, posi.PosZ_objeto20)
-    obj.draw_pyramid(3, 6, 0, 4)
-
-    glTranslatef(posi.PosX_objeto20, posi.PosY_objeto20, posi.PosZ_objeto20)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glTranslatef(posi.PosX_objeto20, posi.PosY_objeto20, posi.PosZ_objeto20)
-    obj.draw_pyramid(3, 6, 0, 4)
-    
-    glPopMatrix()
-    glDisable(GL_LIGHTING)
-    glDisable(GL_LIGHT0)
-
+    gl.glPopMatrix()
 
 
 
