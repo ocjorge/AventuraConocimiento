@@ -289,20 +289,17 @@ class GameLevel:
             create_character.is_active = True
             glTranslatef(posi.PosX_objeto1, posi.PosY_objeto1, posi.PosZ_objeto1)
             self.character.draw()
-            snowman.remove()
-            enemy.remove()
+            
         elif action == 2:
             snowman.visible = True
             glTranslatef(posi.PosX_objeto11, posi.PosY_objeto11, posi.PosZ_objeto11)
             self.snowman.draw()
-            create_character.remove()
-            enemy.remove()
+            
         elif action == 3:
             enemy.is_visible = True
             glTranslatef(posi.PosX_objeto21, posi.PosY_objeto21, posi.PosZ_objeto21)
             self.enemy.draw()
-            create_character.remove()
-            snowman.remove()
+           
         glPopMatrix()
 
         self.generate_enemies_and_treasures()
@@ -328,6 +325,10 @@ class GameLevel:
 
         # Cambiar configuración del nivel
         self.current_level = self.level_configs[self.level_number]
+
+        enemy.is_visible = True
+        character.is_active = True
+        snowman.visible = True 
 
         # Cambiar escenario y música
         global current_escenario

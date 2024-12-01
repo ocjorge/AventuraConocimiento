@@ -70,7 +70,7 @@ PosZ_objeto4 = 14
 obj4_height = 1
 
 PosX_objeto3 = 5
-PosY_objeto3 = -14
+PosY_objeto3 = 5
 PosZ_objeto3 = 14
 obj3_height = 5
 
@@ -108,7 +108,7 @@ def draw5():
 def draw4():        
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
-    glTranslatef(2, 10, PosZ_objeto3)
+    glTranslatef(5, 5, PosZ_objeto3)
     lc.gouraud(0.6, 0.6, 0.6)
     glColor3b(45,87,44)
     obj.draw_cube_dos()
@@ -448,7 +448,7 @@ def main():
 
         glPushMatrix()
         glRotatef(rotation_angle_character, 0, 1, 0)
-        dra.draw_character(character, 10, 6, 4)
+        dra.draw_character(character, 12, 6, 4)
         dra.draw_character(snowman, 6, 6, 4)
         dra.draw_character(enemy, 0, 6, 4)
         character.jump()
@@ -500,6 +500,9 @@ def main():
                 paused = True
 
             elif keys[pygame.K_z] and action != 0:
+                character.reset()
+                snowman.reset()
+                enemy.reset()
                 son.play_sound("Sounds/start01.mp3")
                 game_state = GameState.PLAYING_LEVEL
                 game_level.initialize_level(action)
@@ -550,6 +553,14 @@ def main():
                 draw2(0,-1)
             if keys[pygame.K_F3]:
                 show_personaje_individual(action)
+            if keys[pygame.K_F4]:
+                if action == 1:
+                    character.reset()
+                if action == 2:
+                    snowman.reset()
+                if action == 3:
+                    enemy.reset() 
+
             
 
             if coli.rombo_collision(
@@ -647,6 +658,54 @@ def main():
                 if keys[pygame.K_TAB]:  # Add a key to show progress
                     progress_report = game_manager.get_progress_report()
                     show_message_window(progress_report)
+
+            if coli.rombo_collision_dos(
+                PosX_objeto1,
+                PosY_objeto1,
+                PosZ_objeto1,
+                objeto1_width,
+                objeto1_height,
+                objeto1_depth,
+                PosX_objeto4,
+                PosY_objeto4,
+                PosZ_objeto4,
+                obj4_height
+            ):
+                pygame.mouse.set_visible(True)
+                son.play_sound("Sounds/s06.mp3")
+                juego.seleccionar_pregunta()
+                draw2(30.0, 30.0)
+                resultado = juego.obtener_resultado()
+
+                status, message = game_manager.record_answer(resultado)
+
+
+                if resultado:
+                    son.play_sound("Sounds/start.mp3")
+                    correct_answers += 1
+                else:
+                    son.play_sound("Sounds/wrong.mp3")
+                    incorrect_answers += 1
+                
+                  # Handle the game status
+                if status == GameStatus.GAME_OVER:
+                    show_message_window(message)
+                    running = False
+                elif status == GameStatus.LEVEL_COMPLETE:
+                    game_manager.advance_level()
+                    current_level = game_manager.current_level
+                    current_escenario = (current_escenario + 1) % len(escenarios)
+                    son.play_sound("Sounds/level_change.mp3")
+                    show_message_window(message)
+                elif status == GameStatus.GAME_WIN:
+                    show_message_window(message)
+                    running = False
+                
+                # Show progress after each answer (optional)
+                if keys[pygame.K_TAB]:  # Add a key to show progress
+                    progress_report = game_manager.get_progress_report()
+                    show_message_window(progress_report)
+
              
 
         # Cambiar escenario

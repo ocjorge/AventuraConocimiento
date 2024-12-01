@@ -284,8 +284,10 @@ class Enemy:
         """Remueve el personaje de la pantalla haciéndolo invisible"""
         self.is_visible = False
         # Opcionalmente, podemos mover el personaje fuera de la vista
-        self.position = [1000, 1000, 1000]  # Lo movemos muy lejos
-        self.scale = [0, 0, 0]  # Lo escalamos a 0 para asegurarnos que no sea visible
+        self.position = [0.0, 0.0, 0.0]
+        self.rotation = [0.0, 0.0, 0.0]
+        
+        
 
 # Crear instancia del personaje
 create_enemy = Enemy()
