@@ -23,7 +23,7 @@ def ventana_diccionario():
 
     #crear ventana
     ventana = tk.Tk()
-    ventana.title("Diccionario de Maravillas")
+    ventana.title("Datazos de Maravillas")
 
     #Mostrar texto
     etiqueta_texto = tk.Label(ventana, text=texto, font=("Arial", 12),wraplength=400)
@@ -38,8 +38,9 @@ def ventana_diccionario():
     etiqueta_imagen.pack()
 
     
-    ventana.mainloop()
+   
     ventana.after(5000, ventana.destroy)  # Cerrar ventana después de 5 segundos
+    ventana.mainloop()
 
 ventana_diccionario()
 

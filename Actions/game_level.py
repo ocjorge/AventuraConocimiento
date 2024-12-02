@@ -28,6 +28,7 @@ from .posiciones import game_positions
 from . import game_state_manager
 from .game_state_manager import GameStateManager, GameStatus
 from . import diccionario
+from .diccionario import ventana_diccionario    
 
 character = create_character  # Usamos la instancia importada
 enemy = create_enemy
@@ -36,6 +37,7 @@ action_number = 0
 posi = game_positions
 selected_character = 0
 game_state_manager = GameStateManager()
+VENTANA = False
 
 # Configuración del logging
 logging.basicConfig(
@@ -112,7 +114,7 @@ class GameLevel:
         self.snowman = Snowman()
         self.selected_character = None
 
-        self.diccionario = diccionario
+        
 
         # Configuración de niveles
         self.level_configs = {
@@ -436,8 +438,13 @@ class GameLevel:
             elif self.selected_character == 3:
                 self.enemy.kick()
         
+
         if keys[pygame.K_0]:
-            self.diccionario.ventana_diccionario()
+            son.play_sound("Sounds/s02.mp3")
+            VENTANA = True
+            if VENTANA:
+                pygame.mouse.set_visible(True)
+                diccionario.ventana_diccionario()
             
             if self.selected_character == 1:
                 self.character.jump()
