@@ -541,7 +541,7 @@ def main():
 
             # Manejar movimiento y actualizar nivel
             game_level.handle_movement(keys, action)
-            game_level.update()
+            
 
             # Llamada a la función para mostrar "F1: Ayuda" en la esquina superior izquierda
             txt.draw_text("F1: Ayuda", 10, 10, 0, 12, 255, 255, 255, 0, 0, 0)
