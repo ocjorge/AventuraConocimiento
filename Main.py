@@ -1,8 +1,8 @@
-#main.py
 import pygame
 import numpy as np
 import math
 import os
+import time
 from OpenGL.GLU import *
 from OpenGL.GL import *
 from OpenGL.GLUT import *
@@ -35,8 +35,6 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import simpledialog
 import pyttsx3
-
-
 
 # Autores: Jorge Ortiz Ceballos e Iñaki Iturriaga Rabanal
 # Fecha: 24/11/2024
@@ -86,7 +84,6 @@ objeto1_height = 1
 objeto1_width = 1
 objeto1_depth = 1
 
-
 PosX_objeto = 6
 PosY_objeto = 6
 PosZ_objeto = 4
@@ -94,7 +91,7 @@ objeto_height = 1
 objeto_width = 1
 objeto_depth = 1
 
-def draw5():        
+def draw5():
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
     glTranslatef(PosX_objeto4, PosY_objeto4, PosZ_objeto4)
@@ -105,7 +102,7 @@ def draw5():
     glDisable(GL_LIGHTING)
     glDisable(GL_LIGHT0)
 
-def draw4():        
+def draw4():
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
     glTranslatef(5, 5, PosZ_objeto3)
@@ -117,7 +114,6 @@ def draw4():
     glDisable(GL_LIGHT0)
 
 def draw3():
-    
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
     glTranslatef(PosX_objeto2, PosY_objeto2, PosZ_objeto2)
@@ -129,7 +125,7 @@ def draw3():
 
 def draw2(movX, movY):
     global PosX_objeto1, PosY_objeto1
-    
+
     ancho_pantalla = 800  # Cambia por el ancho real de tu espacio
     alto_pantalla = 600   # Cambia por el alto real de tu espacio
 
@@ -139,8 +135,6 @@ def draw2(movX, movY):
     PosX_objeto1 = max(0, min(PosX_objeto1, ancho_pantalla))
     PosY_objeto1 = max(0, min(PosY_objeto1, alto_pantalla))
 
-    
-    
     glEnable(GL_DEPTH_TEST)
     glPushMatrix()
     glTranslatef(PosX_objeto1, PosY_objeto1, PosZ_objeto1)
@@ -157,7 +151,6 @@ def draw(character):
     glPushMatrix()
     glTranslatef(PosX_objeto, PosY_objeto, PosZ_objeto)
 
-    
     character.draw()  # Llama al método `draw()` del personaje
     glPopMatrix()
     glDisable(GL_LIGHTING)
@@ -196,7 +189,7 @@ def show_personaje_individual(action):
         # Perfumin
         txt.draw_text("Perfumin", 5, 12, 0, 20, 255, 255, 255, 0, 0, 0)  # Título de Perfumin
         txt.draw_text("Astuto y curioso. Frágil ante el daño.", 5, 10, 0, 20, 255, 255, 255, 0, 0, 0)  # Descripción de Perfumin
-        
+
     elif action == 2:
         # Billy Bean
         txt.draw_text("Billy Bean", 5, 8, 0, 20, 255, 255, 255, 0, 0, 0)  # Título de Billy Bean
@@ -207,7 +200,6 @@ def show_personaje_individual(action):
         txt.draw_text("Enemy", 5, 4, 0, 20, 255, 255, 255, 0, 0, 0)  # Título de Enemy
         txt.draw_text("Alta Dificultad.", 5, 3, 0, 20, 255, 255, 255, 0, 0, 0)  # Descripción de Enemy
         txt.draw_text("Su resistencia media es clave.", 5, 2, 0, 20, 255, 255, 255, 0, 0, 0)  # Descripción de Enemy
-
 
 def init_gl():
     glEnable(GL_DEPTH_TEST)  # Habilita el test de profundidad
@@ -226,7 +218,6 @@ def init_gl():
     glMaterialfv(GL_FRONT, GL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
     glMaterialfv(GL_FRONT, GL_DIFFUSE, [0.8, 0.8, 0.8, 1.0])
 
-
 def on_success():
     print("Respuesta correcta")
     show_message_window("Respuesta correcta")
@@ -242,13 +233,13 @@ def check_game_status(correct_answers, incorrect_answers):
     Verifica el estado del juego basado en respuestas correctas e incorrectas.
     Retorna una tupla con: (continúa_juego, nuevo_nivel, mensaje)
     """
-    
+
     # Verificar game over por respuestas incorrectas
     if incorrect_answers >= 2:
-        show_message_window("Has perdido. Demasiadas respuestas incorrectas.")  
+        show_message_window("Has perdido. Demasiadas respuestas incorrectas.")
         return False, False, "Has perdido. Demasiadas respuestas incorrectas."
         pygame.quit()
-    
+
     # Verificar progreso según el nivel actual
     if correct_answers < 3:
         current_level = 1
@@ -256,28 +247,28 @@ def check_game_status(correct_answers, incorrect_answers):
         current_level = 2
     if correct_answers >= 6 and correct_answers < 9:
         current_level = 3
-    
-    if current_level == 1 and correct_answers > 3:        
+
+    if current_level == 1 and correct_answers > 3:
         incorrect_answers = 0
         current_level = 2
-        son.play_sound("Sounds/level_change.mp3") 
+        son.play_sound("Sounds/level_change.mp3")
         current_escenario = (current_escenario + 1) % len(escenarios)
         show_message_window("Has completado el nivel 1.")
-        return False, True, "Has completado el nivel 1."        
-    
+        return False, True, "Has completado el nivel 1."
+
     elif current_level == 2 and correct_answers > 6:
         incorrect_answers = 0
-        son.play_sound("Sounds/level_change.mp3") 
+        son.play_sound("Sounds/level_change.mp3")
         current_escenario = (current_escenario + 1) % len(escenarios)
         current_level = 3
         show_message_window("Has completado el nivel 2.")
         return False, True, "Has completado el nivel 2."
-        
+
     elif current_level == 3 and correct_answers > 9:
         son.play_sound("Sounds/level_1.mp3")
         show_message_window("Has completado el nivel 3.")
         return False, True, "Has completado el nivel 3."
-    
+
 def pedir_nombre():
     """
     Abre una ventana para que el usuario ingrese su nombre y lo retorna.
@@ -302,14 +293,51 @@ def reproducir_texto(nombre):
     engine.setProperty('rate', 150)  # Velocidad de la voz
     engine.setProperty('volume', 0.9)  # Volumen de la voz
     engine.say(texto)
-    engine.runAndWait()    
-    
+    engine.runAndWait()
+
 def show_restart_menu():
     root = tk.Tk()
     root.withdraw()  # Ocultar la ventana principal
     response = messagebox.askyesno("Reiniciar", "Game Over! ¿Te gustaría reiniciar el juego?")
     root.destroy()  # Cerrar la ventana principal
     return response  # Devuelve True si el usuario elige "Sí", False si elige "No"
+
+def show_instructions():
+    instructions = [
+        "Narrador: Bienvenido a Aventura del Conocimiento",
+        "Tu personaje puede moverse con las flechas",
+        "Usa la tecla space bar y 'N' para subir o bajar",
+        "Necesitarás colisionar con objetos usando I, J, K, L",
+        "¡Prepárate para una gran aventura!"
+    ]
+    
+    txt.draw_text(instructions[0], 5, 20, 0, 20, 255, 255, 255, 0, 0, 0)
+    txt.draw_text(instructions[1], 5, 16, 0, 20, 255, 255, 255, 0, 0, 0)
+    txt.draw_text(instructions[2], 5, 12, 0, 20, 255, 255, 255, 0, 0, 0)
+    txt.draw_text(instructions[3], 5, 8, 0, 20, 255, 255, 255, 0, 0, 0)
+    txt.draw_text(instructions[4], 5, 2, 0, 20, 255, 255, 255, 0, 0, 0)
+
+def show_instructions_voice():
+    # Inicializar el motor de texto a voz
+    engine = pyttsx3.init()
+    
+    # Lista de instrucciones
+    instructions = [
+        "Instrucciones de juego:",
+        "Para explorar,Tu personaje puede moverse con las flechas arriba, abajo, izquierda y derecha",
+        "Usa la tecla space bar y 'N' para subir o bajar",
+        "Necesitarás colisionar con objetos usando I, J, K, L",
+        "¡Prepárate para una gran aventura!"
+    ]
+    
+    # Configurar algunas propiedades de voz (opcional)
+    engine.setProperty('rate', 150)  # Velocidad de habla (palabras por minuto)
+    engine.setProperty('volume', 0.9)  # Volumen (0.0 a 1.0)
+    
+    # Leer cada instrucción
+    for instruction in instructions:
+        engine.say(instruction)
+        engine.runAndWait()
 
 def main():
     global continua_juego, current_escenario, elapsed_time, action, rotation_angle_start, rotation_speed_start , move_count, rotation_complete, current_level  # Declaración global
@@ -327,7 +355,7 @@ def main():
 
     character = create_character # Usamos la instancia importada
     enemy = create_enemy
-    snowman = Snowman()    
+    snowman = Snowman()
     elapsed_time = 0  # Inicializamos la variable aquí
     action = 0
     rotation_angle_character = 0.0  # Ángulo de rotación del personaje
@@ -338,7 +366,6 @@ def main():
     correct_answers = 0  # Respuestas correctas acumuladas
     incorrect_answers = 0  # Respuestas incorrectas en el nivel actual
     continua_juego = True
-    
 
     pygame.mouse.set_visible(False)
     pygame.event.set_grab(True)
@@ -353,38 +380,15 @@ def main():
     rotation_complete = False
 
     instructions = [
-    "Controles básicos:",
-    "- Flecha izquierda (←): Mover a la izquierda.",
-    "- Flecha derecha (→): Mover a la derecha.",
-    "- Flecha arriba (↑): Mover hacia adelante (eje Z).",
-    "- Flecha abajo (↓): Mover hacia atrás (eje Z).",
-    "- Espacio: Subir (saltar).",
-    "- Tecla N: Bajar (agacharse).",
-    "- Tecla K: Patear.",
-    "- Tecla H: Saludar o levantar los brazos.",
-    "",
-    "Controles específicos por personaje:",
-    "- Personaje 1: Controlado por las teclas especificadas.",
-    "- Personaje 2: Snowman con movimientos similares.",
-    "- Personaje 3: Enemy también usa las mismas teclas.",
-    "",
-    "Controles adicionales:",
-    "- Tecla J: Mover personaje 2 a la izquierda.",
-    "- Tecla L: Mover personaje 2 a la derecha.",
-    "- Tecla I: Mover personaje 2 hacia adelante.",
-    "- Tecla K: Mover personaje 2 hacia atrás.",
-    "- Tecla 0: Mostrar Datos",
-    "- Tecla F1: Mostrar Instrucciones",
-    "- Tecla F2: Mostrar Desarrolladores.",
-    "- Tecla F3: Mostrar personaje individual (acción actual).",
-    "- Tecla F4: Reiniciar personaje según acción:",
-    "  - Acción 1: Reinicia Personaje 1.",
-    "  - Acción 2: Reinicia Snowman.",
-    "  - Acción 3: Reinicia Enemy.",
-    "",
-    "Presiona ESC para salir de este menú."
+        "Controles básicos:",
+        "- Tecla 0: Mostrar Datos",
+        "- Tecla F1: Mostrar Instrucciones",
+        "- Tecla F2: Mostrar Desarrolladores.",
+        "- Tecla F3: Mostrar personaje individual (acción actual).",
+        "- Tecla F4: Reiniciar personaje según acción:",
+        "Presiona ESC para salir de este menú."
     ]
-    
+
     game_state = GameState.CHARACTER_SELECT
     game_level = GameLevel()
     current_level = 1
@@ -454,7 +458,6 @@ def main():
 
         pygame.mouse.set_pos(display[0] // 2, display[1] // 2)
 
-        
         if paused:  # Si está en pausa, solo espera a que se presione 'P'
             if keys[pygame.K_p]:
                 paused = False  # Cambia el estado a no pausado
@@ -468,14 +471,12 @@ def main():
         character.jump()
         snowman.jump()
         enemy.jump()
-        
+
         glPopMatrix()
 
         if rotation_complete:
             show_menu()
             show_personaje()
-
-        
 
         if game_state == GameState.CHARACTER_SELECT:
             if keys[pygame.K_1]:
@@ -525,36 +526,32 @@ def main():
                 character.remove()
                 enemy.remove()
                 son.play_music("Sounds/game-music-loop-1-143979.mp3")
-                
-            
+
         elif game_state == GameState.PLAYING_LEVEL:
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-            
-            
 
             # Dibujar escenario
             es.draw_escenario(escenarios[current_escenario])
 
-            while bandera:
-                reproducir_texto(nombre)
-                bandera = False
-
+            
 
             # Dibujar nivel
             game_level.draw_level(action)
             # Dibujar personaje seleccionado
-            
 
             # Manejar movimiento y actualizar nivel
             game_level.handle_movement(keys, action)
             game_level.update()
 
+            # Llamada a la función para mostrar "F1: Ayuda" en la esquina superior izquierda
+            txt.draw_text("F1: Ayuda", 10, 10, 0, 12, 255, 255, 255, 0, 0, 0)
             
-                
-            
+
             draw3()
             draw4()
             draw5()
+
+            
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_j]:
@@ -573,9 +570,7 @@ def main():
                 if action == 2:
                     snowman.reset()
                 if action == 3:
-                    enemy.reset() 
-
-            
+                    enemy.reset()
 
             if coli.rombo_collision(
                 PosX_objeto1,
@@ -597,14 +592,13 @@ def main():
 
                 status, message = game_manager.record_answer(resultado)
 
-
                 if resultado:
                     son.play_sound("Sounds/start.mp3")
                     correct_answers += 1
                 else:
                     son.play_sound("Sounds/wrong.mp3")
                     incorrect_answers += 1
-                
+
                   # Handle the game status
                 if status == GameStatus.GAME_OVER:
                     show_message_window(message)
@@ -620,12 +614,12 @@ def main():
                     show_message_window(message)
                     action = 0
                     running = False
-                
+
                 # Show progress after each answer (optional)
                 if keys[pygame.K_TAB]:  # Add a key to show progress
                     progress_report = game_manager.get_progress_report()
                     show_message_window(progress_report)
-            
+
             if coli.rombo_collision_dos(
                 PosX_objeto1,
                 PosY_objeto1,
@@ -646,14 +640,13 @@ def main():
 
                 status, message = game_manager.record_answer(resultado)
 
-
                 if resultado:
                     son.play_sound("Sounds/start.mp3")
                     correct_answers += 1
                 else:
                     son.play_sound("Sounds/wrong.mp3")
                     incorrect_answers += 1
-                
+
                   # Handle the game status
                 if status == GameStatus.GAME_OVER:
                     show_message_window(message)
@@ -667,7 +660,7 @@ def main():
                 elif status == GameStatus.GAME_WIN:
                     show_message_window(message)
                     running = False
-                
+
                 # Show progress after each answer (optional)
                 if keys[pygame.K_TAB]:  # Add a key to show progress
                     progress_report = game_manager.get_progress_report()
@@ -693,14 +686,13 @@ def main():
 
                 status, message = game_manager.record_answer(resultado)
 
-
                 if resultado:
                     son.play_sound("Sounds/start.mp3")
                     correct_answers += 1
                 else:
                     son.play_sound("Sounds/wrong.mp3")
                     incorrect_answers += 1
-                
+
                   # Handle the game status
                 if status == GameStatus.GAME_OVER:
                     show_message_window(message)
@@ -714,13 +706,18 @@ def main():
                 elif status == GameStatus.GAME_WIN:
                     show_message_window(message)
                     running = False
-                
+
                 # Show progress after each answer (optional)
                 if keys[pygame.K_TAB]:  # Add a key to show progress
                     progress_report = game_manager.get_progress_report()
                     show_message_window(progress_report)
 
-             
+            while bandera:
+                reproducir_texto(nombre)
+                time.sleep(2)  # Pausa de 2 segundos
+                show_instructions_voice()
+                show_instructions()
+                bandera = False
 
         # Cambiar escenario
         if keys[pygame.K_c]:
@@ -732,9 +729,10 @@ def main():
             son.stop_music()
 
         # Mostrar instrucciones al presionar F1
-
         if keys[pygame.K_F1]:
             show_message_window(instructions)
+            show_instructions_voice()
+            show_instructions()
         if keys[pygame.K_F2]:
             show_message_window("Desarrollado por: Iñaki Iturriaga Rabanal y Jorge Ortiz Ceballos")
         if keys[pygame.K_ESCAPE]:

@@ -5,15 +5,17 @@ import pygame as py
 py.init()
 py.mixer.init()
 
-def play_music(filename, loop=-1):
-    """Reproduce una música de fondo.
+def play_music(filename, volume=0.7, loop=-1):
+    """Reproduce una música de fondo con control de volumen.
 
     Args:
         filename: El nombre del archivo de la música.
+        volume: Volumen de la música (0.0 a 1.0, por defecto 0.5).
         loop: Número de veces que se repetirá (por defecto, -1 para bucle infinito).
     """
     try:
         py.mixer.music.load(filename)
+        py.mixer.music.set_volume(volume)
         py.mixer.music.play(loop)
     except py.error as e:
         print(f"Error al reproducir la música: {e}")
