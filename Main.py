@@ -287,11 +287,11 @@ def reproducir_texto(nombre):
     engine = pyttsx3.init()
 
     # Texto personalizado con el nombre
-    texto = f"Hola {nombre}, estas en aventura del conocimiento, ¡es hora de aprender!."
+    texto = f"Hola {nombre}, estas en aventura del conocimiento, ¡es hora de aprender!, Presiona F1 para conocer las instrucciones."
 
     # Configurar y reproducir
     engine.setProperty('rate', 150)  # Velocidad de la voz
-    engine.setProperty('volume', 0.9)  # Volumen de la voz
+    engine.setProperty('volume', 0.99)  # Volumen de la voz
     engine.say(texto)
     engine.runAndWait()
 
@@ -308,7 +308,8 @@ def show_instructions():
         "Tu personaje puede moverse con las flechas",
         "Usa la tecla space bar y 'N' para subir o bajar",
         "Necesitarás colisionar con objetos usando I, J, K, L",
-        "¡Prepárate para una gran aventura!"
+        "¡Prepárate para una gran aventura!",
+        "Presiona F1 para escuchar las instrucciones"
     ]
     
     txt.draw_text(instructions[0], 5, 20, 0, 20, 255, 255, 255, 0, 0, 0)
@@ -381,11 +382,11 @@ def main():
 
     instructions = [
         "Controles básicos:",
-        "- Tecla 0: Mostrar Datos",
-        "- Tecla F1: Mostrar Instrucciones",
-        "- Tecla F2: Mostrar Desarrolladores.",
-        "- Tecla F3: Mostrar personaje individual (acción actual).",
-        "- Tecla F4: Reiniciar personaje según acción:",
+        "- Tecla 0: Mostrar Datos\n",
+        "- Tecla F1: Mostrar Instrucciones\n",
+        "- Tecla F2: Mostrar Desarrolladores.\n",
+        "- Tecla F3: Mostrar personaje individual (acción actual).\n",
+        "- Tecla F4: Reiniciar personaje.\n",
         "Presiona ESC para salir de este menú."
     ]
 
@@ -396,6 +397,7 @@ def main():
     juego = JuegoPreguntas(on_success, on_failure)
     nombre = pedir_nombre()
     bandera = True
+
 
     while running:
 
@@ -544,8 +546,17 @@ def main():
             
 
             # Llamada a la función para mostrar "F1: Ayuda" en la esquina superior izquierda
-            txt.draw_text("F1: Ayuda", 10, 10, 0, 12, 255, 255, 255, 0, 0, 0)
+            txt.draw_text("F1: Ayuda", 10, 10, 0, 18, 255, 255, 255, 0, 0, 0)
+
+            while bandera:
+                reproducir_texto(nombre) 
+                txt.draw_text("¨Presiona -Enter- para comenzar a jugar", 10, 10, 0, 12, 255, 255, 255, 0, 0, 0)
+                bandera = False
             
+
+
+
+
 
             draw3()
             draw4()
@@ -712,12 +723,7 @@ def main():
                     progress_report = game_manager.get_progress_report()
                     show_message_window(progress_report)
 
-            while bandera:
-                reproducir_texto(nombre)
-                time.sleep(2)  # Pausa de 2 segundos
-                show_instructions_voice()
-                show_instructions()
-                bandera = False
+           
 
         # Cambiar escenario
         if keys[pygame.K_c]:
@@ -727,7 +733,6 @@ def main():
             son.play_music("Sounds/s00.mp3")
         if keys[pygame.K_b]:  # Apagar sonido general
             son.stop_music()
-
         # Mostrar instrucciones al presionar F1
         if keys[pygame.K_F1]:
             show_message_window(instructions)
