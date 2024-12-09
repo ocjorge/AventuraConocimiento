@@ -37,7 +37,9 @@ from tkinter import simpledialog
 import pyttsx3
 
 # Autores: Jorge Ortiz Ceballos e Iñaki Iturriaga Rabanal
-# Fecha: 24/11/2024
+# Asignatura: Graficación
+# Fecha: 08/12/2024
+#Version 3.7 Final
 # Descripción: Programa juego de aventura educativa en 3D con preguntas y respuestas.
 
 directorio_script = os.path.dirname(os.path.abspath(__file__))
